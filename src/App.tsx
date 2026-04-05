@@ -133,7 +133,7 @@ function App() {
     if (error) console.error(error)
     else {
       setTasks(prev => [...prev, data])
-      setNewTitle('')
+      clearForm()
       setShowForm(false)
     }
   }
