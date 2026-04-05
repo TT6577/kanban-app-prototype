@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabase'
 import './App.css'
+
+// Draggable items library
 import { DndContext } from '@dnd-kit/core'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { useDraggable, useDroppable, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+
+// Icons library
 import { AlertTriangle, Search, Tag } from 'lucide-react'
+
+// Slide animation library
 import { AnimatePresence, motion } from 'framer-motion'
 
 /*
@@ -21,13 +27,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 const COLUMNS = ['To Do', 'In Progress', 'In Review', 'Done']
 
+// Maps for conversion between variable names and page names
 const STATUS_MAP: Record<string, string> = {
   'To Do': 'todo',
   'In Progress': 'in_progress',
   'In Review': 'in_review',
   'Done': 'done',
 }
-
 const STATUS_LABEL: Record<string, string> = {
   'todo': 'To Do',
   'in_progress': 'In Progress',
@@ -35,14 +41,17 @@ const STATUS_LABEL: Record<string, string> = {
   'done': 'Done',
 }
 
+// Used for sorting priorities within columns
 const PRIORITY_ORDER = { high: 0, normal: 1, low: 2 }
 
+// Set up draggable objects, lowkey don't know whats happening here tbh
 function DraggableTask({ task, children }: { task: any, children: React.ReactNode }) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
     data: { task }
   })
 
+  // Let objects follow the mouse
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined
@@ -54,6 +63,7 @@ function DraggableTask({ task, children }: { task: any, children: React.ReactNod
   )
 }
 
+// Defines columns as valid drop areas
 function DroppableColumn({ id, children }: { id: string, children: React.ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id })
 
@@ -71,12 +81,14 @@ function DroppableColumn({ id, children }: { id: string, children: React.ReactNo
   )
 }
 
-
+// Main app updating the kanban page
 function App() {
+  // Basic stuff
   const [tasks, setTasks] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
 
+  // Task entry form variables
   const [newTitle, setNewTitle] = useState('')
   const [newStatus, setNewStatus] = useState('todo')
   const [newDescription, setNewDescription] = useState('')
@@ -84,14 +96,17 @@ function App() {
   const [newDate, setNewDate] = useState('')
   const [newLabel, setNewLabel] = useState('')
 
+  // Task management variables, mostly to remember selected tasks for various actins
   const [taskToDelete, setTaskToDelete] = useState(null)
   const [selectedTask, setSelectedTask] = useState<any | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterLabel, setFilterLabel] = useState('')
 
+  // For summary page
   const urgentCount = tasks.filter(t => isUrgent(t.date, t.status)).length
   const completedCount = tasks.filter(t => t.status == 'done').length
 
+  // Setup session, find previous session if it exists, otherwise create anonymous user
   useEffect(() => {
     async function init() {
       try {
@@ -111,6 +126,7 @@ function App() {
     init()
   }, [])
 
+  // Creates task, submits data into Supabase, updates task array
   async function createTask() {
     if (!newTitle.trim()) return
 
@@ -138,6 +154,7 @@ function App() {
     }
   }
 
+  // Clears form
   function clearForm() {
     setNewTitle('')
     setNewDescription('')
@@ -147,6 +164,7 @@ function App() {
     setNewLabel('')
   }
 
+  // Deletes task from Supabase, updates task array
   async function deleteTask(task : any) {
     await supabase
     .from('tasks')
@@ -162,6 +180,7 @@ function App() {
     })
   }
 
+  // Updates task object when dropped, updates details page if selected task was moved
   async function onDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (!over) return
@@ -179,6 +198,7 @@ function App() {
     await supabase.from('tasks').update({ status: newStatus }).eq('id', task.id)
   }
 
+  // Setup for sensors to detect when task object has been dragged far enough
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -187,12 +207,14 @@ function App() {
     })
   )
 
+  // Shortens title to fit within task block
   function truncate(str: string, maxLength: number): string {
     return str.length > maxLength 
       ? str.slice(0, maxLength) + "..." 
       : str;
   }
 
+  // Returns if task is urgent
   function isUrgent(dueDate: string, status: string): boolean {
     if (!dueDate) return false
     const due = new Date(dueDate)
@@ -202,6 +224,7 @@ function App() {
     return diffDays <= 2 && status !== 'done'
   }
 
+  // Returns "random" color for each label to differentiate them
   function stringToColor(str: string): string {
     let hash = 0
     for (let i = 0; i < str.length; i++) {
@@ -211,16 +234,21 @@ function App() {
     return `hsl(${h}, 60%, 45%)`
   }
 
+  // Loading page
   if (loading) return <p style={{ padding: '2rem' }}>Loading...</p>
 
+  // Main page
   return (
     <div style={{display: 'flex', width: '100%'}}>
       <div style={{ flex: 1, paddingLeft: '1rem', paddingTop: '2rem', fontFamily: 'sans-serif' }}>
 
+        {/* Header area with title and task button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
           <h1 style={{ margin: 0, fontSize: "40px" }}>Tyler's Kanban Board</h1>
           <button className='special-button' style={{ fontSize:"20px", borderRadius:"8px", width:'150px'}} onClick={() => setShowForm(true)}>+ New Task</button>
         </div>
+
+        {/* Shows form if new task added, can input title, status, priority, description, tags, and due date */}
         <AnimatePresence>
           {showForm && (
             <motion.div
@@ -305,11 +333,13 @@ function App() {
           )}
         </AnimatePresence>
 
+        {/* Creates the columns holding the tasks, the core of the kanban board */}
         <DndContext sensors={sensors} onDragEnd={onDragEnd}>
           <div className='column' style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
             {COLUMNS.map(col => (
               <DroppableColumn key={col} id={STATUS_MAP[col]}>
                 <h2 style={{ fontSize: '20px', color: '#e2e2e8' }}>{col}</h2>
+                {/* Displays the tasks as task objects */}
                 {tasks
                   .filter(t => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
                   .filter(t => filterLabel === '' || t.labels?.includes(filterLabel))
@@ -341,12 +371,16 @@ function App() {
                           >&times;
                           </button>
                         </div>
+
+                        {/* Shows confirm and delete buttons if the x button is pressed on the task object */}
                         {taskToDelete === task.id && (
                           <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                             <button type="button" onClick={() => deleteTask(task)}>Confirm</button>
                             <button type="button" onClick={() => setTaskToDelete(null)}>Cancel</button>
                           </div>
                         )}
+
+                        {/* Shows labels of the task, if there are any */}
                         {task.labels && task.labels.length > 0 && (
                           <div style={{ display: 'flex', gap: '4px', marginTop: '4px', flexWrap: 'wrap' }}>
                             {task.labels.map((label: string) => (
@@ -378,6 +412,7 @@ function App() {
             ))}
           </div>
 
+          {/* Shows the current search and selected labels, if there are any */}
           { searchTerm !== "" && (
             <div style={{ paddingTop: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
               <Search size={16}></Search>
@@ -394,11 +429,12 @@ function App() {
           
         </DndContext>
 
-
       </div>
 
-      <div style={{ width: '350px', flexShrink: 0, paddingLeft:'1rem' }}>
 
+      {/* Shows the summary board or the details of tasks if user clicks on a task object */}
+      <div style={{ width: '350px', flexShrink: 0, paddingLeft:'1rem' }}>
+        {/* Animates entry or exit of the side panel when selected */}
         <AnimatePresence mode="wait">
           {selectedTask !== null ? (
             <motion.div
