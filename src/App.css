@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0f0f13;
+  min-height: 100vh;
+  color: #e2e2e8;
+  font-family: sans-serif;
+}
+
+.task-card {
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #2e2e42;
+}
+
+.sidebar {
+  background: #1a1a24;
+  min-height: 100vh;
+  border-left: 1px solid #2e2e42;
+}
+
+.special-button {
+  background: #7c6af7;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-weight: 500;
+}
+
+.special-button:hover {
+  background: #6a59e0;
+}
+
+button {
+  transition: transform 0.1s, opacity 0.1s;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+.form-container {
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar-panel {
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
