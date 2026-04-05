@@ -48,7 +48,7 @@ function DraggableTask({ task, children }: { task: any, children: React.ReactNod
   } : undefined
 
   return (
-    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <div ref={setNodeRef} style={{ ...style, minWidth: 0 }} {...listeners} {...attributes}>
       {children}
     </div>
   )
@@ -207,7 +207,7 @@ function App() {
   if (loading) return <p style={{ padding: '2rem' }}>Loading...</p>
 
   return (
-    <div style={{display: 'flex'}}>
+    <div style={{display: 'flex', width: '100%'}}>
       <div style={{ flex: 1, paddingLeft: '1rem', paddingTop: '2rem', fontFamily: 'sans-serif' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
@@ -394,7 +394,7 @@ function App() {
                   onClick={() => setSelectedTask(null)}
                   style={{fontSize:'20px', width:'30px', height:'30px', flexShrink:0}}
                 >&times;</button>
-                <h2>{selectedTask.title}</h2>
+                <h2 style={{ wordBreak: 'break-word', textAlign:'left', overflowWrap: 'break-word' }}>{selectedTask.title}</h2>
               </div>
               <div style={{display: 'flex', gap:"1rem"}}>
                 <p>Status: {STATUS_LABEL[selectedTask.status]}</p>
