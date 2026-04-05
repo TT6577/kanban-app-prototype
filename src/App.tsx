@@ -495,14 +495,17 @@ function App() {
                 <p style={{fontSize:'30px', color:'#ffffff'}}>Board Summary</p>
                 <ClipboardList size={25}></ClipboardList>
               </div>
-              <div style={{display: 'flex', gap:"1rem"}}>
+              <div style={{display: 'flex', gap:"1rem", paddingBottom:'10px'}}>
                 <p>Total tasks: {tasks.length}</p>
               </div>
-              <div style={{display: 'flex', gap:"1rem"}}>
-                <p>Tasks Urgent: {urgentCount}</p>
+              <div style={{display: 'flex', gap:"1rem", paddingBottom:'10px'}}>
+                <p>Urgent tasks: {urgentCount}</p>
+              </div>
+              <div style={{display: 'flex', paddingBottom:'10px'}}>
+                <p>Completed tasks: {completedCount}</p>
               </div>
               <div style={{display: 'flex'}}>
-                <p>Tasks Completed: {completedCount}</p>
+                <p>Tasks left to complete: {tasks.length - completedCount}</p>
               </div>
             </motion.div>
           )}
