@@ -125,7 +125,7 @@ function App() {
         description: newDescription,
         priority: newPriority,
         date: newDate || null,
-        labels: newLabel.trim() ? [newLabel.trim()] : []
+        labels: newLabel.trim() ? newLabel.trim().split(' ').filter(l => l !== '') : []
       })
       .select()
       .single()
@@ -153,6 +153,13 @@ function App() {
     .delete()
     .eq("id", task.id)
     setTasks(prev => prev.filter(t => t.id !== task.id))
+    setTasks(prev => {
+      const remaining = prev.filter(t => t.id !== task.id)
+      if (filterLabel && !remaining.some(t => t.labels?.includes(filterLabel))) {
+        setFilterLabel('')
+      }
+      return remaining
+    })
   }
 
   async function onDragEnd(event: DragEndEvent) {
@@ -275,7 +282,7 @@ function App() {
                 </div>
                 <div style={{ display: "flex", gap:"8px"}}>
                   <input
-                    placeholder="Add a label (e.g. Bug, Feature, Design)..."
+                    placeholder="Add a label (separated by space eg. bug design feature)..."
                     value={newLabel}
                     onChange={e => setNewLabel(e.target.value)}
                     style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
