@@ -496,7 +496,7 @@ function App() {
                 <ClipboardList size={25}></ClipboardList>
               </div>
               <div style={{display: 'flex', gap:"1rem"}}>
-                <p>Tasks: {tasks.length}</p>
+                <p>Total tasks: {tasks.length}</p>
               </div>
               <div style={{display: 'flex', gap:"1rem"}}>
                 <p>Tasks Urgent: {urgentCount}</p>
