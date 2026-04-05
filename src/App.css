@@ -4,7 +4,24 @@
   box-sizing: border-box;
 }
 
+div:empty {
+    display: none;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+html {
+    margin: 0;
+  padding: 0;
+  width: 100%;
+} 
+
 body {
+  overflow-y: scroll;
   background-color: #0f0f13;
   min-height: 100vh;
   color: #e2e2e8;
@@ -81,8 +98,4 @@ button:active {
     opacity: 1;
     transform: translateX(0);
   }
-}
-
-html {
-  overflow-y: scroll;
 }
