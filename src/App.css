@@ -82,3 +82,7 @@ button:active {
     transform: translateX(0);
   }
 }
+
+html {
+  overflow-y: scroll;
+}
