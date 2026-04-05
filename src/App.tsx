@@ -8,7 +8,7 @@ import type { DragEndEvent } from '@dnd-kit/core'
 import { useDraggable, useDroppable, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 
 // Icons library
-import { AlertTriangle, Search, Tag } from 'lucide-react'
+import { AlertTriangle, Search, Tag, SquareKanban, ClipboardList, ListPlus } from 'lucide-react'
 
 // Slide animation library
 import { AnimatePresence, motion } from 'framer-motion'
@@ -245,7 +245,11 @@ function App() {
         {/* Header area with title and task button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
           <h1 style={{ margin: 0, fontSize: "40px" }}>Tyler's Kanban Board</h1>
-          <button className='special-button' style={{ fontSize:"20px", borderRadius:"8px", width:'150px'}} onClick={() => setShowForm(true)}>+ New Task</button>
+          <SquareKanban size={32}/>
+          <button className='special-button' style={{ display:'flex', fontSize:"20px", borderRadius:"8px", width:'150px', alignItems:'center', gap:'5px'}} onClick={() => setShowForm(true)}>
+            <ListPlus size={20}/>
+            New Task
+          </button>
         </div>
 
         {/* Shows form if new task added, can input title, status, priority, description, tags, and due date */}
@@ -487,8 +491,9 @@ function App() {
                   style={{ padding: '8px', paddingLeft: '36px', width: '100%', borderRadius: '6px', border: '1px solid #ccc', boxSizing: 'border-box' }}
                 />
               </div>
-              <div style={{display:'flex', gap:'1rem', paddingBottom:'20px'}}>
+              <div style={{display:'flex', gap:'8px', paddingBottom:'20px'}}>
                 <p style={{fontSize:'30px', color:'#ffffff'}}>Board Summary</p>
+                <ClipboardList size={25}></ClipboardList>
               </div>
               <div style={{display: 'flex', gap:"1rem"}}>
                 <p>Tasks: {tasks.length}</p>
