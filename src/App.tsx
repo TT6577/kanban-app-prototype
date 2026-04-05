@@ -4,7 +4,7 @@ import './App.css'
 import { DndContext } from '@dnd-kit/core'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { useDraggable, useDroppable, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { AlertTriangle, Search } from 'lucide-react'
+import { AlertTriangle, Search, Tag } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 /*
@@ -370,6 +370,19 @@ function App() {
               </DroppableColumn>
             ))}
           </div>
+
+          { searchTerm !== "" && (
+            <div style={{paddingTop:'1rem'}}>
+              <p style={{color:'#8888a0'}}>Search: {searchTerm}</p>
+            </div>
+          )}
+
+          { filterLabel !== "" && (
+            <div style={{paddingTop:'1rem'}}>
+              <p style={{color:'#8888a0'}}>Tags: {filterLabel}</p>
+            </div>
+          )}
+          
         </DndContext>
 
 
