@@ -166,7 +166,7 @@ function App() {
 
     setTasks(prev => prev.map(t => t.id === task.id ? { ...t, status: newStatus } : t))
     if (selectedTask?.id === task.id) {
-      setSelectedTask(prev => ({ ...prev, status: newStatus }))
+      setSelectedTask((prev: any) => ({ ...prev, status: newStatus }))
     }
 
     await supabase.from('tasks').update({ status: newStatus }).eq('id', task.id)
@@ -306,7 +306,7 @@ function App() {
                 {tasks
                   .filter(t => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
                   .filter(t => filterLabel === '' || t.labels?.includes(filterLabel))
-                  .sort((a, b) => PRIORITY_ORDER[a.priority]-PRIORITY_ORDER[b.priority])
+                  .sort((a: any, b: any) => PRIORITY_ORDER[a.priority as keyof typeof PRIORITY_ORDER]-PRIORITY_ORDER[b.priority as keyof typeof PRIORITY_ORDER])
                   .filter(t => t.status === STATUS_MAP[col])
                   .map(task => (
                     <DraggableTask key={task.id} task={task}>
