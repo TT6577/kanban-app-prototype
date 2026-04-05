@@ -372,14 +372,16 @@ function App() {
           </div>
 
           { searchTerm !== "" && (
-            <div style={{paddingTop:'1rem'}}>
+            <div style={{ paddingTop: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+              <Search size={16}></Search>
               <p style={{color:'#8888a0'}}>Search: {searchTerm}</p>
             </div>
           )}
 
           { filterLabel !== "" && (
-            <div style={{paddingTop:'1rem'}}>
-              <p style={{color:'#8888a0'}}>Tags: {filterLabel}</p>
+            <div style={{ paddingTop: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+              <Tag size={16} />
+              <p style={{ color: '#8888a0' }}>Tags: {filterLabel}</p>
             </div>
           )}
           
